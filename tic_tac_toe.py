@@ -21,8 +21,7 @@ new_board.print_board()
 board_positions = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
 board_occupied = {"A1":' ',"A2":' ', "A3": ' ', "B1":' ', "B2":' ', "B3":' ', "C1":' ', "C2":' ', "C3":' '}
 moves = []
-player_1_moves = []
-player_2_moves = []
+
 
 #Player class 
 class Players:
@@ -47,15 +46,35 @@ def check_move(player_move, moves_list, positions_list):
             break
     return player_move
 
-def check_winner(player_1_moves,player_2_moves):
-    winning_combinations = (["A1","A2","A3"],["B1","B2","B3"],["C1","C2","C3"],["A1","B1","C1"],["A2","B2","C2"],["A3","B3","C3"],["A1","B2","C3"],["C1","B2","A3"])
-    for individual_combination in winning_combinations:
-        if individual_combination in player_1_moves:
-            print("Player 1 has won")
-        if individual_combination in player_2_moves:
-            print("Player 2 has won")
+#Function to check if won game
+def check_winner(board_occupied):
+    #board describes what each row, column and diagonal currently looks like in the game
+    board = [(board_occupied["A1"], board_occupied["A2"], board_occupied["A3"]),
+    (board_occupied["B1"], board_occupied["B2"], board_occupied["B3"]),
+    (board_occupied["C1"], board_occupied["C2"], board_occupied["C3"]),
+    (board_occupied["A1"], board_occupied["B1"], board_occupied["C1"]),
+    (board_occupied["A2"], board_occupied["B2"], board_occupied["C2"]),
+    (board_occupied["A3"], board_occupied["B3"], board_occupied["C3"]),
+    (board_occupied["A1"], board_occupied["B2"], board_occupied["C3"]),
+    (board_occupied["C1"], board_occupied["B2"], board_occupied["A3"])]
+
+    #compares line in board with winning combination to see if either player has won
+    for line in board:
+        if line == ("X","X","X"):
+            print("Player 1 has won!")
+            win = True
+            if win == True:
+                break
+        if line == ("O","O","O"):
+            print("Player 2 has won!")
+            win = True
+            if win == True:
+                break
+        #win condition not satisfied if none of the lines match winning combination
         else:
-            print("This game was a draw")
+            win = False
+    return win
+
 
 def print_board(board_occupied):
     print("\n")
@@ -67,31 +86,34 @@ def print_board(board_occupied):
     print("\n")
 
 
-while len(moves) < 9:
+while check_winner(board_occupied) == False:
   player_1 = Players("Player_1", "X").move()
   player_1_checked = check_move(player_1, moves, board_positions)
   moves.append(player_1_checked)
-  player_1_moves.append(player_1_checked)
   board_occupied[player_1_checked] = 'X'
   print_board(board_occupied)
 
-  if len(moves) == 9:
-      check_winner(player_1_moves,player_2_moves)
+  if check_winner(board_occupied) == True:
+      break
+  else:
+    player_2 = Players("Player_2", "O").move()
+    player_2_checked = check_move(player_2, moves, board_positions)
+    moves.append(player_2_checked)
+    board_occupied[player_2_checked] = 'O'
+    print_board(board_occupied)
+
+  if len(moves) == 8:
+      if check_winner(board_occupied) == False:
+          print("It is a draw")
       break
 
-  player_2 = Players("Player_2", "O").move()
-  player_2_checked = check_move(player_2, moves, board_positions)
-  moves.append(player_2_checked)
-  player_2_moves.append(player_2_checked)
-  board_occupied[player_2_checked] = 'O'
-  print_board(board_occupied)
+
 
 
 #class Game:
    # def __init__(self, player, moves, board):
 
 
-#check if won
 
 
 #Play again function
