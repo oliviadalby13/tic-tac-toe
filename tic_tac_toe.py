@@ -80,8 +80,6 @@ def start_game():
 
 #tic-tac-toe game
 
-board_occupied = start_game()
-
 def tic_tac_toe_game(board_occupied, board_positions, moves):
   while Board(board_occupied).check_winning_board() == False:
     player_1 = Players("Player_1", "X").move()
@@ -93,7 +91,11 @@ def tic_tac_toe_game(board_occupied, board_positions, moves):
     if Board(board_occupied).check_winning_board() == True:
         play_again(board_positions)
         break
-
+    if len(moves) > 8:
+        if Board(board_occupied).check_winning_board() == False:
+            print("It is a draw")
+            play_again(board_positions)
+        break
     else:
       player_2 = Players("Player_2", "O").move()
       player_2_checked = check_move(player_2, moves, board_positions)
@@ -103,7 +105,7 @@ def tic_tac_toe_game(board_occupied, board_positions, moves):
       if Board(board_occupied).check_winning_board() == True:
         play_again(board_positions)
 
-    if len(moves) == 9:
+    if len(moves) > 8:
         if Board(board_occupied).check_winning_board() == False:
             print("It is a draw")
             play_again(board_positions)
@@ -118,5 +120,5 @@ def play_again(board_positions):
         moves = []
         tic_tac_toe_game(board_occupied, board_positions, moves)
 
-
+board_occupied = start_game()
 tic_tac_toe_game(board_occupied, board_positions, moves)
